@@ -8,7 +8,7 @@ The code is hosted on Streamlit and can be viewed in `chat.py`.
 
 
 ## Features
-✅ Voice Enabled
+✅ Voice Enabled. \n
 ✅ CHAT WITH MULTIPLE DOCUMENTS SIMULTANEOUSLY.
 ✅ CHAT WITH MULTIPLE DOCUMENT TYPES (PDFS, WORD AND TEXT FILES).
 ✅ THE APP NOW KEEPS CONV HISTORY IN MEMORY, SO YOU CAN ASK FOLLOW-UP QUESTIONS.
