@@ -1,8 +1,6 @@
 import streamlit as st
 import tempfile
 import os
-import numpy as np
-from io import BytesIO
 import regex as re
 from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -12,10 +10,9 @@ from langchain.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationalRetrievalChain
+from openai.error import InvalidRequestError, AuthenticationError
 from stt import show_voice_input
 from tts import show_audio_player
-from openai.error import InvalidRequestError, OpenAIError, AuthenticationError
-
 from src.utils.lang import en
 
 
@@ -118,6 +115,7 @@ def generate_response(retriever, openai_api_key, query_text):
         st.session_state.responses.append(response)
 
         return res_dict
+    return None
 
 def main():
     # intialize session variables
@@ -138,8 +136,8 @@ def main():
 
 
     # Page title
-    st.set_page_config(page_title="Chat with Anna", page_icon=":bird:")
-    st.title('Chat with Anna :bird:')
+    st.set_page_config(page_title="Chat with KALAB", page_icon=":bird:")
+    st.title('Chat with KALAB :bird:')
 
     # read the user's openAI key
     openai_api_key = st.text_input('OpenAI API Key', placeholder='sk-', type='password')
@@ -156,26 +154,24 @@ def main():
             with st.spinner('Processing...'):
                 retriever = put_files_in_DB(uploaded_files, openai_api_key)
 
-
+            # allow user to speak
             show_voice_input()
+            # Query text
             query_text = st.session_state.user_text
 
             # Form input and query
             result = []
             with st.form('myform', clear_on_submit=False):
-                # Query text
-               # show_voice_input()
-                #submitted = st.form_submit_button('Submit')
-
-
                 # submit key
                 submitted = st.form_submit_button('Submit')
                 if submitted and openai_api_key.startswith('sk-'):
                     with st.spinner('Calculating...'):
                         res_dict = generate_response(retriever, openai_api_key, query_text)
-                        result.append(res_dict['answer'])
-                        st.divider()
-                        show_audio_player(res_dict['answer'])
+                        if res_dict is not None:
+                            result.append(res_dict['answer'])
+                            st.divider()
+                            show_audio_player(res_dict['answer'])
+
                         del openai_api_key
 
             if len(result):
