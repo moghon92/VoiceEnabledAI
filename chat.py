@@ -136,8 +136,8 @@ def main():
 
 
     # Page title
-    st.set_page_config(page_title="Chat with KALAB", page_icon=":bird:")
-    st.title('Chat with KALAB :bird:')
+    st.set_page_config(page_title="Chat with Docs", page_icon=":bird:")
+    st.title('Chat with Docs (voice enabled) :bird:')
 
     # read the user's openAI key
     openai_api_key = st.text_input('OpenAI API Key', placeholder='sk-', type='password')
